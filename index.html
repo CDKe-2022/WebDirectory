@@ -124,7 +124,7 @@ tailwind.config = {
   </section>
 
   <!-- ============ 站点卡片 ============ -->
-  <section class="pb-16">
+  <section class="pb-24">
     <div class="flex items-end justify-between mb-5">
       <div>
         <h2 class="flex items-center gap-2.5 text-lg font-bold text-slate-800">
@@ -141,19 +141,6 @@ tailwind.config = {
     <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
   </section>
 </main>
-
-<!-- ============ Footer ============ -->
-<footer class="border-t border-slate-200/70 bg-white/60">
-  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-    <div class="flex items-center gap-2">
-      <span class="w-5 h-5 rounded-md bg-gradient-to-br from-teal-400 to-teal-600 text-white flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
-      </span>
-      <span>KeHuang Nav · 个人导航起始页</span>
-    </div>
-    <div class="font-mono"><span id="footCount">12</span> sites · kehuang.eu.org · 自定义数据仅保存在本地浏览器</div>
-  </div>
-</footer>
 
 <!-- Toast 容器 -->
 <div id="toastBox" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-2"></div>
@@ -272,7 +259,6 @@ function renderGrid(){
   const all = [...SITES, ...state.customs];
   state.list = all;
   $('secCount').textContent = all.length;
-  $('footCount').textContent = all.length;
   grid.innerHTML = all.map((s,i)=>cardHTML(s,i)).join('');
 }
 
