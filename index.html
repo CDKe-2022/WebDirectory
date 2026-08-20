@@ -23,17 +23,11 @@ tailwind.config = {
       },
       keyframes: {
         fadeUp:  {'0%':{opacity:'0',transform:'translateY(16px)'},'100%':{opacity:'1',transform:'translateY(0)'}},
-        fadeIn:  {from:{opacity:'0'},to:{opacity:'1'}},
-        pop:     {'0%':{opacity:'0',transform:'scale(.95) translateY(10px)'},'100%':{opacity:'1',transform:'scale(1) translateY(0)'}},
         slideIn: {'0%':{opacity:'0',transform:'translateY(12px) scale(.97)'},'100%':{opacity:'1',transform:'translateY(0) scale(1)'}},
-        shake:   {'0%,100%':{transform:'translateX(0)'},'20%,60%':{transform:'translateX(-5px)'},'40%,80%':{transform:'translateX(5px)'}},
       },
       animation: {
         'fade-up':'fadeUp .55s cubic-bezier(.23,.68,.35,1) both',
-        'fade-in':'fadeIn .3s ease both',
-        'pop':'pop .28s cubic-bezier(.21,1.02,.73,1) both',
         'slide-in':'slideIn .35s cubic-bezier(.21,1.02,.73,1) both',
-        'shake':'shake .4s ease',
       },
     }
   }
@@ -44,14 +38,14 @@ tailwind.config = {
   html{scroll-behavior:smooth}
   body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   ::selection{background:#99f6e4;color:#0f766e}
-  /* 隐藏 Tab 栏横向滚动条 */
-  .no-scrollbar::-webkit-scrollbar{display:none}
-  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
   /* 全局滚动条美化 */
   ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-track{background:transparent}
   ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:9999px;border:3px solid transparent;background-clip:padding-box}
   ::-webkit-scrollbar-thumb:hover{background:#94a3b8;border:3px solid transparent;background-clip:padding-box}
+  /* 顶部抽屉式导航：仅在页面顶部展开，向下滚动自动收起 */
+  #topDrawer{max-height:4.5rem;transition:max-height .32s cubic-bezier(.4,0,.2,1),transform .32s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+  #topDrawer.collapsed{max-height:0;opacity:0;transform:translateY(-100%);border-bottom-color:transparent}
   /* 统一按键样式 */
   .kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.7rem;padding:.18rem .42rem;border:1px solid #e2e8f0;border-bottom-width:2px;background:#f8fafc;border-radius:.4rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748b}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -60,9 +54,9 @@ tailwind.config = {
 
 <body class="min-h-screen overflow-x-hidden font-sans bg-gradient-to-b from-[#f0fdfa] via-[#f7fdfb] to-white text-slate-800">
 
-<!-- ============ 粘性毛玻璃 Header + 横向 Tab ============ -->
-<header class="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-slate-200/70">
-  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+<!-- ============ 顶部抽屉式导航：仅在页面顶部展开，向下滚动自动收起 ============ -->
+<header id="topDrawer" class="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-slate-200/70 overflow-hidden">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
     <a href="#" class="flex items-center gap-2.5 shrink-0" aria-label="KeHuang 导航">
       <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/25">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
@@ -72,21 +66,7 @@ tailwind.config = {
         <span class="block text-[10px] font-mono text-teal-600/80 tracking-widest">KEHUANG.EU.ORG</span>
       </span>
     </a>
-    <div class="flex items-center gap-2">
-      <button type="button" id="helpBtn" title="快捷键帮助" class="w-9 h-9 rounded-lg border border-slate-200 bg-white/60 text-slate-500 hover:text-teal-600 hover:border-teal-300 hover:bg-teal-50 transition-all inline-flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-      </button>
-      <button type="button" id="addBtn" class="h-9 px-3.5 rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-px active:translate-y-0 transition-all inline-flex items-center gap-1.5">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        <span class="hidden sm:inline">添加网址</span>
-      </button>
-    </div>
   </div>
-  <!-- 横向 Tab：激活态为底部青色下划线（滑动指示条） -->
-  <nav id="tabsNav" class="max-w-[1280px] mx-auto px-4 sm:px-6 relative" aria-label="站点分类">
-    <div id="tabList" class="flex items-stretch gap-0.5 overflow-x-auto no-scrollbar"></div>
-    <div id="tabInd" class="absolute bottom-0 h-[2.5px] rounded-full bg-gradient-to-r from-teal-500 to-teal-400 transition-all duration-300 ease-out opacity-0" style="left:0;width:0"></div>
-  </nav>
 </header>
 
 <main class="relative max-w-[1280px] mx-auto px-4 sm:px-6">
@@ -100,8 +80,8 @@ tailwind.config = {
     </div>
 
     <div class="relative z-10 text-center">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-teal-100 shadow-sm text-xs text-teal-700 font-medium">
-        <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/85 border border-teal-100 shadow-sm text-[15px] sm:text-base text-teal-700 font-semibold">
+        <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
         <span id="dateText">——</span>
       </div>
 
@@ -139,9 +119,6 @@ tailwind.config = {
         <!-- 搜索建议 / 历史记录 -->
         <div id="sugBox" class="hidden absolute left-0 right-0 top-[calc(100%+10px)] bg-white border border-slate-200/90 rounded-2xl shadow-2xl shadow-slate-900/10 py-1.5 z-30 overflow-hidden"></div>
       </form>
-
-      <!-- 快速访问 chips -->
-      <div id="quickChips" class="mt-6 flex flex-wrap items-center justify-center gap-2"></div>
     </div>
   </section>
 
@@ -151,10 +128,10 @@ tailwind.config = {
       <div>
         <h2 class="flex items-center gap-2.5 text-lg font-bold text-slate-800">
           <span class="w-1 h-5 rounded-full bg-gradient-to-b from-teal-400 to-teal-600"></span>
-          <span id="secTitle">全部站点</span>
+          <span>全部站点</span>
           <span id="secCount" class="text-xs font-mono font-medium text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-2 py-0.5">0</span>
         </h2>
-        <p id="secDesc" class="mt-1.5 text-[13px] text-slate-400 ml-3.5"></p>
+        <p class="mt-1.5 text-[13px] text-slate-400 ml-3.5">精心整理的常用工具集合</p>
       </div>
       <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 pb-0.5">
         按 <kbd class="kbd">1</kbd> – <kbd class="kbd">9</kbd> 快速打开站点
@@ -177,94 +154,6 @@ tailwind.config = {
   </div>
 </footer>
 
-<!-- ============ 模态框：添加网址 ============ -->
-<div id="addModal" class="hidden fixed inset-0 z-50">
-  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] animate-fade-in" data-close></div>
-  <div class="relative h-full w-full flex items-center justify-center p-4 pointer-events-none">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 animate-pop overflow-hidden pointer-events-auto">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-        <h3 class="font-bold text-slate-800 flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          </span>添加网址
-        </h3>
-        <button type="button" data-close class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors inline-flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-      </div>
-      <form id="addForm" class="p-6 pt-5 space-y-4" novalidate>
-        <p id="formErr" class="hidden text-xs text-rose-500 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2"></p>
-        <div>
-          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">名称 <span class="text-rose-400">*</span></label>
-          <input id="fName" type="text" placeholder="例如：我的博客" class="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
-        </div>
-        <div>
-          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">网址 <span class="text-rose-400">*</span></label>
-          <div id="fUrlWrap" class="flex h-11 items-center rounded-xl bg-slate-50 border border-slate-200 focus-within:bg-white focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/10 transition-all">
-            <span class="pl-3.5 pr-1.5 text-[11px] font-mono text-slate-400 select-none">https://</span>
-            <input id="fUrl" type="text" placeholder="example.kehuang.eu.org" class="flex-1 h-full min-w-0 bg-transparent outline-none text-sm text-slate-700 placeholder:text-slate-400 pr-3.5 font-mono">
-          </div>
-        </div>
-        <div>
-          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">描述</label>
-          <input id="fDesc" type="text" placeholder="一句话介绍（选填）" class="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
-        </div>
-        <div>
-          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">分类</label>
-          <select id="fCat" class="w-full h-11 px-3.5 pr-8 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 cursor-pointer">
-            <option value="custom">我的自定义</option>
-            <option value="work">效率工具</option>
-            <option value="text">文本处理</option>
-            <option value="media">媒体处理</option>
-            <option value="fun">阅读娱乐</option>
-          </select>
-        </div>
-        <div class="flex items-center justify-end gap-2 pt-1">
-          <button type="button" data-close class="h-10 px-4 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">取消</button>
-          <button type="submit" class="h-10 px-5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-px active:translate-y-0 transition-all">添加</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- ============ 模态框：快捷键帮助 ============ -->
-<div id="helpModal" class="hidden fixed inset-0 z-50">
-  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] animate-fade-in" data-close></div>
-  <div class="relative h-full w-full flex items-center justify-center p-4 pointer-events-none">
-    <div class="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-100 animate-pop overflow-hidden pointer-events-auto">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-        <h3 class="font-bold text-slate-800">键盘快捷键</h3>
-        <button type="button" data-close class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors inline-flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-      </div>
-      <div class="p-3">
-        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
-          <span class="flex items-center gap-1"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">K</kbd><span class="text-slate-300 text-xs">或</span><kbd class="kbd">/</kbd></span>
-          <span class="text-[13px] text-slate-500">聚焦搜索框</span>
-        </div>
-        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
-          <span class="flex items-center gap-1"><kbd class="kbd">1</kbd><span class="text-slate-300 text-xs">–</span><kbd class="kbd">9</kbd></span>
-          <span class="text-[13px] text-slate-500">打开当前列表第 N 个站点</span>
-        </div>
-        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
-          <span class="flex items-center gap-1"><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd></span>
-          <span class="text-[13px] text-slate-500">选择搜索建议</span>
-        </div>
-        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
-          <span class="flex items-center gap-1"><kbd class="kbd">Enter</kbd></span>
-          <span class="text-[13px] text-slate-500">搜索 / 打开选中建议</span>
-        </div>
-        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
-          <span class="flex items-center gap-1"><kbd class="kbd">Esc</kbd></span>
-          <span class="text-[13px] text-slate-500">关闭弹层 / 退出搜索</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Toast 容器 -->
 <div id="toastBox" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-2"></div>
 
@@ -285,7 +174,6 @@ const ICONS = {
   sliders:    SVG('<path d="M3 5h7"/><path d="M15 5h6"/><circle cx="12" cy="5" r="2"/><path d="M3 12h4"/><path d="M13 12h8"/><circle cx="10" cy="12" r="2"/><path d="M3 19h11"/><path d="M19 19h2"/><circle cx="16" cy="19" r="2"/>'),
   type:       SVG('<path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/>'),
   fileEdit:   SVG('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M11.5 13.5 15 10l1.5 1.5-3.5 3.5-2 .5z"/>'),
-  gauge:      SVG('<path d="m12 14 3.5-3.5"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>'),
   grid3x3:    SVG('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>'),
   music:      SVG('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
   droplet:    SVG('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'),
@@ -298,7 +186,6 @@ const ICONS = {
   check:      SVG('<path d="M20 6 9 17l-5-5"/>'),
   clock:      SVG('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
   arrowUpRight:SVG('<path d="M7 17 17 7"/><path d="M7 7h10v10"/>'),
-  link:       SVG('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
   sun:        SVG('<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>'),
   moon:       SVG('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
 };
@@ -322,17 +209,6 @@ const SITES = [
 // 从站点数据提取显示用域名（内置站点与自定义站点通用）
 const domainOf = s => s.domain || (()=>{ try{ return new URL(s.url).hostname }catch(e){ return s.url } })();
 
-// 分类 Tab
-const TABS = [
-  { key:'all',    label:'全部站点', desc:'精心整理的常用工具集合' },
-  { key:'work',   label:'效率工具', desc:'笔记、待办与配置，让工作流更顺畅' },
-  { key:'text',   label:'文本处理', desc:'文本转换与批量重命名' },
-  { key:'media',  label:'媒体处理', desc:'音频转换与图片水印处理' },
-  { key:'fun',    label:'阅读娱乐', desc:'阅读、数独与小游戏，放松的好去处' },
-  { key:'fav',    label:'我的收藏', desc:'你标记的高频常用站点' },
-  { key:'custom', label:'自定义',   desc:'由你亲手添加的专属网址' },
-];
-
 // 搜索引擎（必应为默认）
 const ENGINES = {
   bing:   { name:'必应', full:'必应搜索',  dot:'bg-cyan-500',   hint:'Bing · 默认引擎', make:q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}` },
@@ -341,9 +217,6 @@ const ENGINES = {
   ddg:    { name:'DuckDuckGo', full:'DuckDuckGo', dot:'bg-orange-500', hint:'注重隐私',   make:q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}` },
   site:   { name:'本站内', full:'站内搜索', dot:'bg-teal-600',   hint:'site:kehuang.eu.org', make:q=>`https://www.bing.com/search?q=${encodeURIComponent('site:kehuang.eu.org '+q)}` },
 };
-
-const QUICK_IDS = ['tool','todo','note','sudu','game'];                 // 快速访问 chips
-const COLORS = ['teal','sky','indigo','amber','rose','violet','cyan','orange']; // 自定义站点配色轮换
 
 /* ================================================================
  * 工具函数与状态
@@ -358,7 +231,6 @@ const store = {
 
 // 初始化状态（含本地数据安全校验）
 const state = {
-  tab: 'all',
   engine: ENGINES[store.get('kh_engine','bing')] ? store.get('kh_engine','bing') : 'bing',
   favs: new Set((store.get('kh_favs',[])||[]).filter(x => typeof x === 'string')),
   customs: (store.get('kh_customs',[])||[]).filter(s => s && s.name && s.url).map(s => ({
@@ -372,50 +244,13 @@ const state = {
 };
 
 // DOM 引用
-const tabList=$('tabList'), tabInd=$('tabInd'), grid=$('grid'), toastBox=$('toastBox');
+const grid=$('grid'), toastBox=$('toastBox');
 const input=$('searchInput'), searchForm=$('searchForm'), sugBox=$('sugBox');
 const engineBtn=$('engineBtn'), engineMenu=$('engineMenu'), engineDot=$('engineDot'), engineName=$('engineName'), engineChev=$('engineChev');
-const addModal=$('addModal'), helpModal=$('helpModal'), addForm=$('addForm');
-const fName=$('fName'), fUrl=$('fUrl'), fDesc=$('fDesc'), fCat=$('fCat'), fUrlWrap=$('fUrlWrap'), formErr=$('formErr');
 
 /* ================================================================
- * 渲染：Tab / 卡片 / 快速访问
+ * 渲染：站点卡片
  * ================================================================ */
-function renderTabs(){
-  const all = [...SITES, ...state.customs];
-  const counts = {
-    all: all.length,
-    work: all.filter(s=>s.cat==='work').length,
-    text: all.filter(s=>s.cat==='text').length,
-    media: all.filter(s=>s.cat==='media').length,
-    fun: all.filter(s=>s.cat==='fun').length,
-    fav: all.filter(s=>state.favs.has(s.id)).length,
-    custom: state.customs.length,
-  };
-  tabList.innerHTML = TABS.map(t => {
-    const a = t.key === state.tab;
-    return `<button type="button" data-tab="${t.key}" class="relative flex items-center gap-1.5 px-3.5 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${a?'text-teal-700':'text-slate-500 hover:text-teal-700 hover:bg-teal-50/40'}">
-      ${t.label}<span class="text-[11px] font-mono leading-none px-1.5 py-[3px] rounded-full ${a?'bg-teal-100/80 text-teal-700':'bg-slate-100 text-slate-400'}">${counts[t.key]}</span>
-    </button>`;
-  }).join('');
-}
-
-// 滑动式 Tab 指示条
-function moveIndicator(){
-  requestAnimationFrame(()=>{
-    const b = tabList.querySelector(`[data-tab="${state.tab}"]`);
-    if(!b) return;
-    tabInd.style.opacity = '1';
-    tabInd.style.width = b.offsetWidth + 'px';
-    tabInd.style.left = b.offsetLeft + 'px';
-  });
-}
-
-function switchTab(k){
-  state.tab = k;
-  renderTabs(); renderGrid(); moveIndicator();
-}
-
 function cardHTML(s, i){
   const fav = state.favs.has(s.id);
   return `
@@ -445,43 +280,12 @@ function cardHTML(s, i){
   </div>`;
 }
 
-function emptyHTML(){
-  const isFav = state.tab === 'fav';
-  return `<div class="col-span-full">
-    <div class="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
-      <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-400 flex items-center justify-center border border-teal-100/60">${ICONS[isFav?'star':'link']('w-7 h-7')}</div>
-      <p class="mt-5 font-semibold text-slate-700">${isFav?'还没有收藏任何站点':'还没有自定义网址'}</p>
-      <p class="mt-1.5 text-sm text-slate-400 max-w-xs leading-relaxed">${isFav?'鼠标悬停到卡片上，点击右上角的星标即可收藏常用站点。':'点击右上角的「添加网址」按钮，把常用站点加入你的导航。'}</p>
-      ${isFav?'':`<button type="button" id="emptyAddBtn" class="mt-5 h-10 px-5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-0.5 active:translate-y-0 transition-all inline-flex items-center gap-1.5">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>添加网址</button>`}
-    </div>
-  </div>`;
-}
-
 function renderGrid(){
   const all = [...SITES, ...state.customs];
-  let list;
-  if(state.tab === 'all')         list = all;
-  else if(state.tab === 'fav')    list = all.filter(s => state.favs.has(s.id));
-  else if(state.tab === 'custom') list = [...state.customs];
-  else                            list = all.filter(s => s.cat === state.tab);
-  state.list = list;
-
-  const meta = TABS.find(t => t.key === state.tab);
-  $('secTitle').textContent = meta.label;
-  $('secDesc').textContent  = meta.desc;
-  $('secCount').textContent = list.length;
+  state.list = all;
+  $('secCount').textContent = all.length;
   $('footCount').textContent = all.length;
-
-  grid.innerHTML = list.length ? list.map((s,i)=>cardHTML(s,i)).join('') : emptyHTML();
-}
-
-function renderChips(){
-  const items = QUICK_IDS.map(id => SITES.find(s => s.id === id)).filter(Boolean);
-  $('quickChips').innerHTML = `
-    <span class="text-xs text-slate-400/90 mr-0.5 py-1.5 inline-flex items-center gap-1">${ICONS.link('w-3.5 h-3.5')}快速访问</span>
-    ${items.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="${esc(domainOf(s))}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-slate-200/90 text-xs font-medium text-slate-600 shadow-sm hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50 hover:-translate-y-0.5 transition-all duration-200">
-      <span class="w-1.5 h-1.5 rounded-full bg-${s.color}-500"></span>${esc(s.name)}</a>`).join('')}`;
+  grid.innerHTML = all.map((s,i)=>cardHTML(s,i)).join('');
 }
 
 /* ================================================================
@@ -715,9 +519,7 @@ function toggleFav(id){
   had ? state.favs.delete(id) : state.favs.add(id);
   store.set('kh_favs', [...state.favs]);
   const site = [...SITES, ...state.customs].find(s => s.id === id);
-  if(site) toast(had ? `已取消收藏「${esc(site.name)}」` : `已收藏「${esc(site.name)}」`, had ? null : { label:'查看', fn:()=>switchTab('fav') });
-  renderTabs(); moveIndicator();
-  if(state.tab === 'fav'){ renderGrid(); return; }
+  if(site) toast(had ? `已取消收藏「${esc(site.name)}」` : `已收藏「${esc(site.name)}」`);
   // 就地更新星标按钮，避免重放卡片动画
   const btn = grid.querySelector(`[data-fav="${id}"]`);
   if(btn){
@@ -733,11 +535,11 @@ function delCustom(id){
   if(idx < 0) return;
   const [item] = state.customs.splice(idx, 1);
   store.set('kh_customs', state.customs);
-  renderTabs(); moveIndicator(); renderGrid();
+  renderGrid();
   toast(`已删除「${esc(item.name)}」`, { label:'撤销', fn:()=>{
     state.customs.splice(Math.min(idx, state.customs.length), 0, item);
     store.set('kh_customs', state.customs);
-    renderTabs(); moveIndicator(); renderGrid();
+    renderGrid();
   }});
 }
 
@@ -745,54 +547,7 @@ grid.addEventListener('click', e => {
   const favB = e.target.closest('[data-fav]');
   if(favB){ e.preventDefault(); e.stopPropagation(); toggleFav(favB.dataset.fav); return; }
   const delB = e.target.closest('[data-del]');
-  if(delB){ e.preventDefault(); e.stopPropagation(); delCustom(delB.dataset.del); return; }
-  if(e.target.closest('#emptyAddBtn')) openAdd();
-});
-
-/* ================================================================
- * 模态框
- * ================================================================ */
-function anyModalOpen(){ return !addModal.classList.contains('hidden') || !helpModal.classList.contains('hidden'); }
-function openModal(m){ m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-function closeModal(m){ m.classList.add('hidden'); if(!anyModalOpen()) document.body.style.overflow = ''; }
-
-[addModal, helpModal].forEach(m => m.addEventListener('click', e => { if(e.target.closest('[data-close]')) closeModal(m); }));
-
-function openAdd(){ openModal(addModal); setTimeout(()=>fName.focus(), 60); }
-$('addBtn').addEventListener('click', openAdd);
-$('helpBtn').addEventListener('click', () => openModal(helpModal));
-
-function markErr(el){
-  el.classList.add('!border-rose-400','!ring-4','!ring-rose-500/10','animate-shake');
-  setTimeout(()=>el.classList.remove('animate-shake'), 450);
-  const handler = () => el.classList.remove('!border-rose-400','!ring-4','!ring-rose-500/10');
-  el.addEventListener('input', handler, { once:true });
-}
-function showFormErr(msg){ formErr.textContent = msg; formErr.classList.remove('hidden'); }
-
-addForm.addEventListener('submit', e => {
-  e.preventDefault();
-  formErr.classList.add('hidden');
-  const name = fName.value.trim();
-  const url  = fUrl.value.trim().replace(/^https?:\/\//i,'').replace(/\/+$/,'');
-  let ok = true;
-  if(!name){ markErr(fName); ok = false; }
-  const host = url.split(/[/?#]/)[0];
-  if(!url || !/^[\w-]+(\.[\w-]+)+(:\d+)?$/i.test(host)){ markErr(fUrlWrap); ok = false; }
-  if(!ok){ showFormErr('请检查表单：名称必填，网址需为有效域名（如 example.com）'); return; }
-
-  const site = {
-    id: 'c_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-    name, url: 'https://' + url, domain: host,
-    desc: fDesc.value.trim() || '自定义收藏站点',
-    cat: fCat.value, icon: 'globe',
-    color: COLORS[state.customs.length % COLORS.length], custom: true,
-  };
-  state.customs.push(site);
-  store.set('kh_customs', state.customs);
-  closeModal(addModal); addForm.reset();
-  switchTab(site.cat === 'custom' ? 'custom' : site.cat);
-  toast(`已添加「${esc(site.name)}」`, { label:'打开', fn:()=>window.open(site.url,'_blank') });
+  if(delB){ e.preventDefault(); e.stopPropagation(); delCustom(delB.dataset.del); }
 });
 
 /* ================================================================
@@ -802,11 +557,10 @@ document.addEventListener('keydown', e => {
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
   if((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)){ e.preventDefault(); input.focus(); input.select(); return; }
   if(e.key === 'Escape'){
-    if(anyModalOpen()){ closeModal(addModal); closeModal(helpModal); return; }
     if(typing){ hideSugBox(); input.blur(); }
     return;
   }
-  if(typing || e.ctrlKey || e.metaKey || e.altKey || anyModalOpen()) return;
+  if(typing || e.ctrlKey || e.metaKey || e.altKey) return;
   if(e.key === '/'){ e.preventDefault(); input.focus(); }
   else if(/^[1-9]$/.test(e.key)){
     const s = state.list[+e.key - 1];
@@ -815,23 +569,22 @@ document.addEventListener('keydown', e => {
 });
 
 /* ================================================================
- * Tab 点击委托 / 初始化
+ * 顶部抽屉导航：仅在页面顶部展开，向下滚动自动收起
  * ================================================================ */
-tabList.addEventListener('click', e => {
-  const b = e.target.closest('[data-tab]');
-  if(!b || b.dataset.tab === state.tab) return;
-  switchTab(b.dataset.tab);
-});
-
-window.addEventListener('resize', moveIndicator);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
+const topDrawer = $('topDrawer');
+let drawerRAF = false;
+function syncDrawer(){
+  drawerRAF = false;
+  topDrawer.classList.toggle('collapsed', window.scrollY > 12);
+}
+window.addEventListener('scroll', () => {
+  if(!drawerRAF){ drawerRAF = true; requestAnimationFrame(syncDrawer); }
+}, { passive:true });
 
 // 启动
+syncDrawer();
 setEngine(state.engine);
-renderTabs();
-renderChips();
 renderGrid();
-moveIndicator();
 updateClock();
 setInterval(updateClock, 1000);
 </script>
