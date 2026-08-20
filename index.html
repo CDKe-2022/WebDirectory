@@ -43,9 +43,10 @@ tailwind.config = {
   ::-webkit-scrollbar-track{background:transparent}
   ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:9999px;border:3px solid transparent;background-clip:padding-box}
   ::-webkit-scrollbar-thumb:hover{background:#94a3b8;border:3px solid transparent;background-clip:padding-box}
-  /* 顶部抽屉式导航：仅在页面顶部展开，向下滚动自动收起 */
-  #topDrawer{max-height:4.5rem;transition:max-height .32s cubic-bezier(.4,0,.2,1),transform .32s cubic-bezier(.4,0,.2,1),opacity .3s ease}
-  #topDrawer.collapsed{max-height:0;opacity:0;transform:translateY(-100%);border-bottom-color:transparent}
+  /* 顶部抽屉式导航：固定定位（收展不影响布局高度，不产生页面跳动），
+     仅在页面顶部附近展开，向下滚动超过阈值收起；40~120px 之间保持原状态（迟滞区间） */
+  #topDrawer{transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .28s ease}
+  #topDrawer.collapsed{transform:translateY(-100%);opacity:0;pointer-events:none}
   /* 统一按键样式 */
   .kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.7rem;padding:.18rem .42rem;border:1px solid #e2e8f0;border-bottom-width:2px;background:#f8fafc;border-radius:.4rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748b}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -54,8 +55,8 @@ tailwind.config = {
 
 <body class="min-h-screen overflow-x-hidden font-sans bg-gradient-to-b from-[#f0fdfa] via-[#f7fdfb] to-white text-slate-800">
 
-<!-- ============ 顶部抽屉式导航：仅在页面顶部展开，向下滚动自动收起 ============ -->
-<header id="topDrawer" class="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-slate-200/70 overflow-hidden">
+<!-- ============ 顶部抽屉式导航（fixed，收展不挤压内容） ============ -->
+<header id="topDrawer" class="fixed top-0 inset-x-0 z-40 bg-white/70 backdrop-blur-xl border-b border-slate-200/70">
   <div class="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
     <a href="#" class="flex items-center gap-2.5 shrink-0" aria-label="KeHuang 导航">
       <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/25">
@@ -69,10 +70,10 @@ tailwind.config = {
   </div>
 </header>
 
-<main class="relative max-w-[1280px] mx-auto px-4 sm:px-6">
+<main class="relative max-w-[1280px] mx-auto px-4 sm:px-6 pt-14">
 
   <!-- ============ Hero：问候 + 时钟 + 搜索 ============ -->
-  <section class="relative pt-10 sm:pt-14 pb-10">
+  <section class="relative pt-10 sm:pt-14 pb-20 sm:pb-28">
     <!-- 氛围光斑（自裁剪，不影响下拉层） -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       <div class="absolute -top-24 left-[10%] w-[28rem] h-[28rem] rounded-full bg-teal-200/25 blur-3xl"></div>
@@ -137,7 +138,7 @@ tailwind.config = {
         按 <kbd class="kbd">1</kbd> – <kbd class="kbd">9</kbd> 快速打开站点
       </div>
     </div>
-    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
   </section>
 </main>
 
@@ -150,7 +151,7 @@ tailwind.config = {
       </span>
       <span>KeHuang Nav · 个人导航起始页</span>
     </div>
-    <div class="font-mono"><span id="footCount">12</span> sites · kehuang.eu.org · 收藏与自定义仅保存在本地浏览器</div>
+    <div class="font-mono"><span id="footCount">12</span> sites · kehuang.eu.org · 自定义数据仅保存在本地浏览器</div>
   </div>
 </footer>
 
@@ -181,8 +182,6 @@ const ICONS = {
   gamepad:    SVG('<line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59c-.01.05-.02.1-.03.16C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41a2 2 0 0 1 1.42-.59h4.34a2 2 0 0 1 1.42.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.54-.6-6.58-.67-7.25-.01-.05-.02-.11-.03-.16A4 4 0 0 0 17.32 5z"/>'),
   globe:      SVG('<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>'),
   search:     SVG('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>'),
-  star:       SVG('<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/>'),
-  starFill:   SVG('<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/>','fill="currentColor"'),
   check:      SVG('<path d="M20 6 9 17l-5-5"/>'),
   clock:      SVG('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
   arrowUpRight:SVG('<path d="M7 17 17 7"/><path d="M7 7h10v10"/>'),
@@ -190,20 +189,20 @@ const ICONS = {
   moon:       SVG('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
 };
 
-// 站点数据（12 个网址，按功能分类）
+// 站点数据（12 个网址）
 const SITES = [
-  { id:'tool',    name:'工具集',     url:'https://tool.kehuang.eu.org',        desc:'在线小工具合集，一站搞定日常需求',        cat:'work',  icon:'wrench',      color:'teal' },
-  { id:'note',    name:'云笔记',     url:'https://note.kehuang.eu.org',        desc:'轻量级笔记应用，随手记录灵感与想法',      cat:'work',  icon:'pencil',      color:'sky' },
-  { id:'note4',   name:'笔记 Pro',   url:'https://note4.kehuang.eu.org',       desc:'全新一代笔记工作台，更强的组织能力',      cat:'work',  icon:'fileText',    color:'indigo' },
-  { id:'todo',    name:'待办清单',   url:'https://todo.kehuang.eu.org',        desc:'任务管理与待办事项，让效率触手可及',      cat:'work',  icon:'checkSquare', color:'emerald' },
-  { id:'config',  name:'配置中心',   url:'https://config.kehuang.eu.org',      desc:'个人配置与参数的统一管理面板',            cat:'work',  icon:'sliders',     color:'slate' },
-  { id:'text',    name:'文本处理',   url:'https://text.kehuang.eu.org',        desc:'文本清洗、转换、统计与格式化',            cat:'text',  icon:'type',        color:'amber' },
-  { id:'rename',  name:'批量重命名', url:'https://renamefile.kehuang.eu.org',  desc:'文件批量重命名，规则灵活省时省力',        cat:'text',  icon:'fileEdit',    color:'orange' },
-  { id:'flac',    name:'音频转换',   url:'https://flac.kehuang.eu.org',        desc:'FLAC 无损音频的转换与处理',               cat:'media', icon:'music',       color:'cyan' },
-  { id:'shuiyin', name:'图片水印',   url:'https://shuiyin.kehuang.eu.org',     desc:'为图片快速添加水印，保护你的创作',        cat:'media', icon:'droplet',     color:'blue' },
-  { id:'read',    name:'在线阅读',   url:'https://read.kehuang.eu.org',        desc:'稍后读与沉浸式阅读空间',                  cat:'fun',   icon:'bookOpen',    color:'violet' },
-  { id:'sudu',    name:'数独游戏',   url:'https://sudu.kehuang.eu.org',        desc:'经典数独益智游戏，锻炼逻辑思维',          cat:'fun',   icon:'grid3x3',     color:'rose' },
-  { id:'game',    name:'游戏大厅',   url:'https://game.kehuang.eu.org',        desc:'休闲小游戏合集，忙里偷闲放松一下',        cat:'fun',   icon:'gamepad',     color:'fuchsia' },
+  { id:'tool',    name:'工具集',     url:'https://tool.kehuang.eu.org',        icon:'wrench',      color:'teal' },
+  { id:'note',    name:'云笔记',     url:'https://note.kehuang.eu.org',        icon:'pencil',      color:'sky' },
+  { id:'note4',   name:'笔记 Pro',   url:'https://note4.kehuang.eu.org',       icon:'fileText',    color:'indigo' },
+  { id:'todo',    name:'待办清单',   url:'https://todo.kehuang.eu.org',        icon:'checkSquare', color:'emerald' },
+  { id:'config',  name:'配置中心',   url:'https://config.kehuang.eu.org',      icon:'sliders',     color:'slate' },
+  { id:'text',    name:'文本处理',   url:'https://text.kehuang.eu.org',        icon:'type',        color:'amber' },
+  { id:'rename',  name:'批量重命名', url:'https://renamefile.kehuang.eu.org',  icon:'fileEdit',    color:'orange' },
+  { id:'flac',    name:'音频转换',   url:'https://flac.kehuang.eu.org',        icon:'music',       color:'cyan' },
+  { id:'shuiyin', name:'图片水印',   url:'https://shuiyin.kehuang.eu.org',     icon:'droplet',     color:'blue' },
+  { id:'read',    name:'在线阅读',   url:'https://read.kehuang.eu.org',        icon:'bookOpen',    color:'violet' },
+  { id:'sudu',    name:'数独游戏',   url:'https://sudu.kehuang.eu.org',        icon:'grid3x3',     color:'rose' },
+  { id:'game',    name:'游戏大厅',   url:'https://game.kehuang.eu.org',        icon:'gamepad',     color:'fuchsia' },
 ];
 
 // 从站点数据提取显示用域名（内置站点与自定义站点通用）
@@ -232,11 +231,9 @@ const store = {
 // 初始化状态（含本地数据安全校验）
 const state = {
   engine: ENGINES[store.get('kh_engine','bing')] ? store.get('kh_engine','bing') : 'bing',
-  favs: new Set((store.get('kh_favs',[])||[]).filter(x => typeof x === 'string')),
   customs: (store.get('kh_customs',[])||[]).filter(s => s && s.name && s.url).map(s => ({
-    ...s, custom:true, cat:s.cat||'custom', icon:'globe',
+    ...s, custom:true, icon:'globe',
     color:s.color || 'teal',
-    desc:s.desc || '自定义收藏站点',
     domain:s.domain || (()=>{ try{ return new URL(s.url).hostname }catch(e){ return s.url } })(),
   })),
   history: (store.get('kh_history',[])||[]).filter(x => typeof x === 'string').slice(0,10),
@@ -249,33 +246,24 @@ const input=$('searchInput'), searchForm=$('searchForm'), sugBox=$('sugBox');
 const engineBtn=$('engineBtn'), engineMenu=$('engineMenu'), engineDot=$('engineDot'), engineName=$('engineName'), engineChev=$('engineChev');
 
 /* ================================================================
- * 渲染：站点卡片
+ * 渲染：站点卡片（紧凑横排：左图标 · 右名称 · 下网址）
  * ================================================================ */
 function cardHTML(s, i){
-  const fav = state.favs.has(s.id);
   return `
-  <div class="group relative bg-white rounded-2xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(15,23,42,.04)] hover:shadow-[0_16px_32px_-12px_rgba(13,148,136,.28)] hover:-translate-y-1.5 hover:border-${s.color}-300/70 transition-all duration-300 animate-fade-up cursor-pointer" style="animation-delay:${Math.min(i,12)*45}ms">
+  <div class="group relative flex items-center gap-3.5 bg-white rounded-2xl border border-slate-200/80 pl-4 pr-3.5 py-3 shadow-[0_1px_2px_rgba(15,23,42,.04)] hover:shadow-[0_12px_24px_-12px_rgba(13,148,136,.28)] hover:-translate-y-1 hover:border-${s.color}-300/70 transition-all duration-300 animate-fade-up" style="animation-delay:${Math.min(i,12)*45}ms">
     <a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 rounded-2xl z-[1] focus-visible:ring-2 focus-visible:ring-teal-500/50" aria-label="在新标签页打开 ${esc(s.name)}"></a>
-    <div class="relative z-[2] pointer-events-none">
-      <div class="flex items-start justify-between">
-        <div class="w-12 h-12 rounded-xl bg-${s.color}-50 text-${s.color}-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-${s.color}-100">
-          ${(ICONS[s.icon]||ICONS.globe)('w-6 h-6')}
-        </div>
-        <div class="flex items-center gap-1 pointer-events-auto -mt-1 -mr-1">
-          <button type="button" data-fav="${s.id}" title="${fav?'取消收藏':'加入收藏'}" aria-label="${fav?'取消收藏':'加入收藏'}" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${fav?'text-amber-500 bg-amber-50 opacity-100':'text-slate-300 opacity-0 group-hover:opacity-100 hover:text-amber-400 hover:bg-amber-50 focus-visible:opacity-100'}">
-            ${fav?ICONS.starFill('w-4 h-4'):ICONS.star('w-4 h-4')}
-          </button>
-          ${s.custom?`<button type="button" data-del="${s.id}" title="删除" aria-label="删除该网址" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 opacity-0 group-hover:opacity-100 hover:text-rose-500 hover:bg-rose-50 focus-visible:opacity-100 transition-all duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-          </button>`:''}
-        </div>
+    <div class="relative z-[2] flex items-center gap-3.5 w-full min-w-0 pointer-events-none">
+      <div class="w-10 h-10 rounded-xl bg-${s.color}-50 text-${s.color}-600 flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-${s.color}-100">
+        ${(ICONS[s.icon]||ICONS.globe)('w-5 h-5')}
       </div>
-      <h3 class="mt-4 font-semibold text-slate-800 text-[15px] truncate group-hover:text-teal-700 transition-colors duration-300">${esc(s.name)}</h3>
-      <p class="mt-1 text-[13px] leading-relaxed text-slate-500 line-clamp-2 min-h-[2.5rem]">${esc(s.desc)}</p>
-    </div>
-    <div class="relative z-[2] mt-3.5 pt-3 border-t border-slate-100/90 flex items-center justify-between pointer-events-none">
-      <span class="font-mono text-[11px] text-slate-400 truncate">${esc(domainOf(s))}</span>
-      <span class="text-slate-300 group-hover:text-teal-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">${ICONS.arrowUpRight('w-4 h-4')}</span>
+      <div class="min-w-0 flex-1 text-left">
+        <h3 class="font-semibold text-slate-800 text-[15px] truncate group-hover:text-teal-700 transition-colors duration-300">${esc(s.name)}</h3>
+        <p class="mt-0.5 font-mono text-xs text-slate-400 truncate">${esc(domainOf(s))}</p>
+      </div>
+      <span class="text-slate-300 group-hover:text-teal-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0">${ICONS.arrowUpRight('w-4 h-4')}</span>
+      ${s.custom?`<button type="button" data-del="${s.id}" title="删除" aria-label="删除该网址" class="pointer-events-auto w-8 h-8 -mr-1 rounded-lg flex items-center justify-center text-slate-300 opacity-0 group-hover:opacity-100 hover:text-rose-500 hover:bg-rose-50 focus-visible:opacity-100 transition-all duration-200 shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+      </button>`:''}
     </div>
   </div>`;
 }
@@ -512,24 +500,8 @@ document.addEventListener('click', e => {
 });
 
 /* ================================================================
- * 收藏 / 删除自定义 / 卡片事件委托
+ * 删除自定义站点 / 卡片事件委托
  * ================================================================ */
-function toggleFav(id){
-  const had = state.favs.has(id);
-  had ? state.favs.delete(id) : state.favs.add(id);
-  store.set('kh_favs', [...state.favs]);
-  const site = [...SITES, ...state.customs].find(s => s.id === id);
-  if(site) toast(had ? `已取消收藏「${esc(site.name)}」` : `已收藏「${esc(site.name)}」`);
-  // 就地更新星标按钮，避免重放卡片动画
-  const btn = grid.querySelector(`[data-fav="${id}"]`);
-  if(btn){
-    const fav = !had;
-    btn.title = fav ? '取消收藏' : '加入收藏';
-    btn.className = `w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${fav?'text-amber-500 bg-amber-50 opacity-100':'text-slate-300 opacity-0 group-hover:opacity-100 hover:text-amber-400 hover:bg-amber-50 focus-visible:opacity-100'}`;
-    btn.innerHTML = fav ? ICONS.starFill('w-4 h-4') : ICONS.star('w-4 h-4');
-  }
-}
-
 function delCustom(id){
   const idx = state.customs.findIndex(s => s.id === id);
   if(idx < 0) return;
@@ -544,8 +516,6 @@ function delCustom(id){
 }
 
 grid.addEventListener('click', e => {
-  const favB = e.target.closest('[data-fav]');
-  if(favB){ e.preventDefault(); e.stopPropagation(); toggleFav(favB.dataset.fav); return; }
   const delB = e.target.closest('[data-del]');
   if(delB){ e.preventDefault(); e.stopPropagation(); delCustom(delB.dataset.del); }
 });
@@ -569,13 +539,17 @@ document.addEventListener('keydown', e => {
 });
 
 /* ================================================================
- * 顶部抽屉导航：仅在页面顶部展开，向下滚动自动收起
+ * 顶部抽屉导航：仅在页面顶部附近展开
+ * - fixed 定位：收起/展开只做位移，不改变文档流高度，页面不会跳动
+ * - 迟滞阈值：滚动 < 40px 展开，> 120px 收起，中间区间保持当前状态
  * ================================================================ */
 const topDrawer = $('topDrawer');
 let drawerRAF = false;
 function syncDrawer(){
   drawerRAF = false;
-  topDrawer.classList.toggle('collapsed', window.scrollY > 12);
+  const y = window.scrollY;
+  if(y <= 40)      topDrawer.classList.remove('collapsed');
+  else if(y >= 120) topDrawer.classList.add('collapsed');
 }
 window.addEventListener('scroll', () => {
   if(!drawerRAF){ drawerRAF = true; requestAnimationFrame(syncDrawer); }
