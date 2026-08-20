@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeHuang 导航 · 个人起始页</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230d9488'/%3E%3Cpath d='M15.5 8.5 13.7 13.7 8.5 15.5 10.3 10.3Z' fill='white'/%3E%3C/svg%3E">
+
+<!-- 字体：Inter（UI）+ JetBrains Mono（代码/域名/数字） -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter','system-ui','-apple-system','PingFang SC','Hiragino Sans GB','Microsoft YaHei','sans-serif'],
+        mono: ['JetBrains Mono','ui-monospace','SFMono-Regular','monospace'],
+      },
+      keyframes: {
+        fadeUp:  {'0%':{opacity:'0',transform:'translateY(16px)'},'100%':{opacity:'1',transform:'translateY(0)'}},
+        fadeIn:  {from:{opacity:'0'},to:{opacity:'1'}},
+        pop:     {'0%':{opacity:'0',transform:'scale(.95) translateY(10px)'},'100%':{opacity:'1',transform:'scale(1) translateY(0)'}},
+        slideIn: {'0%':{opacity:'0',transform:'translateY(12px) scale(.97)'},'100%':{opacity:'1',transform:'translateY(0) scale(1)'}},
+        shake:   {'0%,100%':{transform:'translateX(0)'},'20%,60%':{transform:'translateX(-5px)'},'40%,80%':{transform:'translateX(5px)'}},
+      },
+      animation: {
+        'fade-up':'fadeUp .55s cubic-bezier(.23,.68,.35,1) both',
+        'fade-in':'fadeIn .3s ease both',
+        'pop':'pop .28s cubic-bezier(.21,1.02,.73,1) both',
+        'slide-in':'slideIn .35s cubic-bezier(.21,1.02,.73,1) both',
+        'shake':'shake .4s ease',
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  html{scroll-behavior:smooth}
+  body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  ::selection{background:#99f6e4;color:#0f766e}
+  /* 隐藏 Tab 栏横向滚动条 */
+  .no-scrollbar::-webkit-scrollbar{display:none}
+  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+  /* 全局滚动条美化 */
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:9999px;border:3px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:hover{background:#94a3b8;border:3px solid transparent;background-clip:padding-box}
+  /* 统一按键样式 */
+  .kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.7rem;padding:.18rem .42rem;border:1px solid #e2e8f0;border-bottom-width:2px;background:#f8fafc;border-radius:.4rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748b}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden font-sans bg-gradient-to-b from-[#f0fdfa] via-[#f7fdfb] to-white text-slate-800">
+
+<!-- ============ 粘性毛玻璃 Header + 横向 Tab ============ -->
+<header class="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-slate-200/70">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+    <a href="#" class="flex items-center gap-2.5 shrink-0" aria-label="KeHuang 导航">
+      <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/25">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+      </span>
+      <span class="leading-tight">
+        <span class="block font-bold text-slate-800 text-[15px]">KeHuang 导航</span>
+        <span class="block text-[10px] font-mono text-teal-600/80 tracking-widest">KEHUANG.EU.ORG</span>
+      </span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button type="button" id="helpBtn" title="快捷键帮助" class="w-9 h-9 rounded-lg border border-slate-200 bg-white/60 text-slate-500 hover:text-teal-600 hover:border-teal-300 hover:bg-teal-50 transition-all inline-flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5 w-[18px] h-[18px]"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      </button>
+      <button type="button" id="addBtn" class="h-9 px-3.5 rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-px active:translate-y-0 transition-all inline-flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <span class="hidden sm:inline">添加网址</span>
+      </button>
+    </div>
+  </div>
+  <!-- 横向 Tab：激活态为底部青色下划线（滑动指示条） -->
+  <nav id="tabsNav" class="max-w-[1280px] mx-auto px-4 sm:px-6 relative" aria-label="站点分类">
+    <div id="tabList" class="flex items-stretch gap-0.5 overflow-x-auto no-scrollbar"></div>
+    <div id="tabInd" class="absolute bottom-0 h-[2.5px] rounded-full bg-gradient-to-r from-teal-500 to-teal-400 transition-all duration-300 ease-out opacity-0" style="left:0;width:0"></div>
+  </nav>
+</header>
+
+<main class="relative max-w-[1280px] mx-auto px-4 sm:px-6">
+
+  <!-- ============ Hero：问候 + 时钟 + 搜索 ============ -->
+  <section class="relative pt-10 sm:pt-14 pb-10">
+    <!-- 氛围光斑（自裁剪，不影响下拉层） -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-24 left-[10%] w-[28rem] h-[28rem] rounded-full bg-teal-200/25 blur-3xl"></div>
+      <div class="absolute top-20 right-[6%] w-96 h-96 rounded-full bg-cyan-200/25 blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-teal-100 shadow-sm text-xs text-teal-700 font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+        <span id="dateText">——</span>
+      </div>
+
+      <h1 class="mt-6 flex items-center justify-center gap-3 text-4xl sm:text-[44px] font-extrabold tracking-tight text-slate-800">
+        <span id="greetIcon"></span><span id="greetText">你好</span>
+      </h1>
+
+      <div class="mt-3 flex items-baseline justify-center font-mono tabular-nums">
+        <span id="clockMain" class="text-5xl font-bold tracking-tight text-slate-800">00:00</span>
+        <span id="clockSec" class="text-xl font-semibold text-teal-500">:00</span>
+      </div>
+
+      <!-- 搜索框：浅色底、聚焦青色边框 + 发光环 -->
+      <form id="searchForm" class="relative max-w-2xl mx-auto mt-9" autocomplete="off">
+        <div class="flex items-center gap-1 bg-white/95 border border-slate-200 rounded-2xl h-[58px] pl-1.5 pr-1.5 shadow-[0_2px_12px_-4px_rgba(15,23,42,.08)] transition-all duration-300 focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/15 focus-within:shadow-[0_10px_32px_-8px_rgba(13,148,136,.28)]">
+          <!-- 搜索引擎切换 -->
+          <button type="button" id="engineBtn" class="flex items-center gap-1.5 px-3 h-11 rounded-xl text-[13px] font-medium text-slate-600 hover:bg-teal-50 hover:text-teal-700 transition-colors shrink-0">
+            <span id="engineDot" class="w-2 h-2 rounded-full bg-cyan-500"></span>
+            <span id="engineName">必应</span>
+            <span id="engineChev" class="text-slate-400 transition-transform duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="m6 9 6 6 6-6"/></svg>
+            </span>
+          </button>
+          <span class="w-px h-6 bg-slate-200 shrink-0"></span>
+          <input id="searchInput" type="text" aria-label="搜索或输入网址" placeholder="在必应中搜索，或输入网址直达…"
+                 class="flex-1 h-full min-w-0 bg-transparent outline-none text-[15px] text-slate-700 placeholder:text-slate-400">
+          <span class="hidden md:inline-flex items-center gap-1 mr-1 shrink-0"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">K</kbd></span>
+          <button type="submit" class="h-11 px-4 sm:px-5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-0.5 active:translate-y-0 transition-all shrink-0 inline-flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <span class="hidden sm:inline">搜索</span>
+          </button>
+        </div>
+        <!-- 引擎下拉菜单 -->
+        <div id="engineMenu" class="absolute left-0 top-[calc(100%+10px)] w-60 bg-white border border-slate-200/90 rounded-2xl shadow-2xl shadow-slate-900/10 p-1.5 z-30 origin-top-left scale-95 opacity-0 pointer-events-none transition-all duration-200"></div>
+        <!-- 搜索建议 / 历史记录 -->
+        <div id="sugBox" class="hidden absolute left-0 right-0 top-[calc(100%+10px)] bg-white border border-slate-200/90 rounded-2xl shadow-2xl shadow-slate-900/10 py-1.5 z-30 overflow-hidden"></div>
+      </form>
+
+      <!-- 快速访问 chips -->
+      <div id="quickChips" class="mt-6 flex flex-wrap items-center justify-center gap-2"></div>
+    </div>
+  </section>
+
+  <!-- ============ 站点卡片 ============ -->
+  <section class="pb-16">
+    <div class="flex items-end justify-between mb-5">
+      <div>
+        <h2 class="flex items-center gap-2.5 text-lg font-bold text-slate-800">
+          <span class="w-1 h-5 rounded-full bg-gradient-to-b from-teal-400 to-teal-600"></span>
+          <span id="secTitle">全部站点</span>
+          <span id="secCount" class="text-xs font-mono font-medium text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-2 py-0.5">0</span>
+        </h2>
+        <p id="secDesc" class="mt-1.5 text-[13px] text-slate-400 ml-3.5"></p>
+      </div>
+      <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 pb-0.5">
+        按 <kbd class="kbd">1</kbd> – <kbd class="kbd">9</kbd> 快速打开站点
+      </div>
+    </div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+  </section>
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="border-t border-slate-200/70 bg-white/60">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+    <div class="flex items-center gap-2">
+      <span class="w-5 h-5 rounded-md bg-gradient-to-br from-teal-400 to-teal-600 text-white flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+      </span>
+      <span>KeHuang Nav · 个人导航起始页</span>
+    </div>
+    <div class="font-mono"><span id="footCount">12</span> sites · kehuang.eu.org · 收藏与自定义仅保存在本地浏览器</div>
+  </div>
+</footer>
+
+<!-- ============ 模态框：添加网址 ============ -->
+<div id="addModal" class="hidden fixed inset-0 z-50">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] animate-fade-in" data-close></div>
+  <div class="relative h-full w-full flex items-center justify-center p-4 pointer-events-none">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 animate-pop overflow-hidden pointer-events-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </span>添加网址
+        </h3>
+        <button type="button" data-close class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors inline-flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <form id="addForm" class="p-6 pt-5 space-y-4" novalidate>
+        <p id="formErr" class="hidden text-xs text-rose-500 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2"></p>
+        <div>
+          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">名称 <span class="text-rose-400">*</span></label>
+          <input id="fName" type="text" placeholder="例如：我的博客" class="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">网址 <span class="text-rose-400">*</span></label>
+          <div id="fUrlWrap" class="flex h-11 items-center rounded-xl bg-slate-50 border border-slate-200 focus-within:bg-white focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/10 transition-all">
+            <span class="pl-3.5 pr-1.5 text-[11px] font-mono text-slate-400 select-none">https://</span>
+            <input id="fUrl" type="text" placeholder="example.kehuang.eu.org" class="flex-1 h-full min-w-0 bg-transparent outline-none text-sm text-slate-700 placeholder:text-slate-400 pr-3.5 font-mono">
+          </div>
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">描述</label>
+          <input id="fDesc" type="text" placeholder="一句话介绍（选填）" class="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-slate-600 mb-1.5">分类</label>
+          <select id="fCat" class="w-full h-11 px-3.5 pr-8 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 outline-none transition-all focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 cursor-pointer">
+            <option value="custom">我的自定义</option>
+            <option value="work">效率工具</option>
+            <option value="text">文本处理</option>
+            <option value="media">媒体处理</option>
+            <option value="fun">阅读娱乐</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-1">
+          <button type="button" data-close class="h-10 px-4 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">取消</button>
+          <button type="submit" class="h-10 px-5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-px active:translate-y-0 transition-all">添加</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 模态框：快捷键帮助 ============ -->
+<div id="helpModal" class="hidden fixed inset-0 z-50">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] animate-fade-in" data-close></div>
+  <div class="relative h-full w-full flex items-center justify-center p-4 pointer-events-none">
+    <div class="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-100 animate-pop overflow-hidden pointer-events-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <h3 class="font-bold text-slate-800">键盘快捷键</h3>
+        <button type="button" data-close class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors inline-flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-3">
+        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
+          <span class="flex items-center gap-1"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">K</kbd><span class="text-slate-300 text-xs">或</span><kbd class="kbd">/</kbd></span>
+          <span class="text-[13px] text-slate-500">聚焦搜索框</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
+          <span class="flex items-center gap-1"><kbd class="kbd">1</kbd><span class="text-slate-300 text-xs">–</span><kbd class="kbd">9</kbd></span>
+          <span class="text-[13px] text-slate-500">打开当前列表第 N 个站点</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
+          <span class="flex items-center gap-1"><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd></span>
+          <span class="text-[13px] text-slate-500">选择搜索建议</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
+          <span class="flex items-center gap-1"><kbd class="kbd">Enter</kbd></span>
+          <span class="text-[13px] text-slate-500">搜索 / 打开选中建议</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-teal-50/50">
+          <span class="flex items-center gap-1"><kbd class="kbd">Esc</kbd></span>
+          <span class="text-[13px] text-slate-500">关闭弹层 / 退出搜索</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 容器 -->
+<div id="toastBox" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-2"></div>
+
+<script>
+/* ================================================================
+ * 数据定义
+ * ================================================================ */
+
+// 图标工厂：统一的 Lucide 风格线性 SVG
+const SVG = (inner, extra='') => (cls='w-5 h-5') =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${cls}" ${extra}>${inner}</svg>`;
+
+const ICONS = {
+  wrench:     SVG('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'),
+  pencil:     SVG('<path d="M21.17 6.83a2.83 2.83 0 0 0-4-4L3 16.99V21h4.01z"/><path d="m15 5 4 4"/>'),
+  fileText:   SVG('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>'),
+  checkSquare:SVG('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8.5 12.5 2.5 2.5 5-5.5"/>'),
+  sliders:    SVG('<path d="M3 5h7"/><path d="M15 5h6"/><circle cx="12" cy="5" r="2"/><path d="M3 12h4"/><path d="M13 12h8"/><circle cx="10" cy="12" r="2"/><path d="M3 19h11"/><path d="M19 19h2"/><circle cx="16" cy="19" r="2"/>'),
+  type:       SVG('<path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/>'),
+  fileEdit:   SVG('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M11.5 13.5 15 10l1.5 1.5-3.5 3.5-2 .5z"/>'),
+  gauge:      SVG('<path d="m12 14 3.5-3.5"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>'),
+  music:      SVG('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
+  droplet:    SVG('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'),
+  bookOpen:   SVG('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'),
+  gamepad:    SVG('<line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59c-.01.05-.02.1-.03.16C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41a2 2 0 0 1 1.42-.59h4.34a2 2 0 0 1 1.42.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.54-.6-6.58-.67-7.25-.01-.05-.02-.11-.03-.16A4 4 0 0 0 17.32 5z"/>'),
+  globe:      SVG('<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>'),
+  search:     SVG('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>'),
+  star:       SVG('<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/>'),
+  starFill:   SVG('<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/>','fill="currentColor"'),
+  check:      SVG('<path d="M20 6 9 17l-5-5"/>'),
+  clock:      SVG('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
+  arrowUpRight:SVG('<path d="M7 17 17 7"/><path d="M7 7h10v10"/>'),
+  link:       SVG('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
+  sun:        SVG('<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>'),
+  moon:       SVG('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
+};
+
+// 站点数据（12 个网址，按功能分类）
+const SITES = [
+  { id:'tool',    name:'工具集',     url:'https://tool.kehuang.eu.org',        desc:'在线小工具合集，一站搞定日常需求',        cat:'work',  icon:'wrench',      color:'teal' },
+  { id:'note',    name:'云笔记',     url:'https://note.kehuang.eu.org',        desc:'轻量级笔记应用，随手记录灵感与想法',      cat:'work',  icon:'pencil',      color:'sky' },
+  { id:'note4',   name:'笔记 Pro',   url:'https://note4.kehuang.eu.org',       desc:'全新一代笔记工作台，更强的组织能力',      cat:'work',  icon:'fileText',    color:'indigo' },
+  { id:'todo',    name:'待办清单',   url:'https://todo.kehuang.eu.org',        desc:'任务管理与待办事项，让效率触手可及',      cat:'work',  icon:'checkSquare', color:'emerald' },
+  { id:'config',  name:'配置中心',   url:'https://config.kehuang.eu.org',      desc:'个人配置与参数的统一管理面板',            cat:'work',  icon:'sliders',     color:'slate' },
+  { id:'text',    name:'文本处理',   url:'https://text.kehuang.eu.org',        desc:'文本清洗、转换、统计与格式化',            cat:'text',  icon:'type',        color:'amber' },
+  { id:'rename',  name:'批量重命名', url:'https://renamefile.kehuang.eu.org',  desc:'文件批量重命名，规则灵活省时省力',        cat:'text',  icon:'fileEdit',    color:'orange' },
+  { id:'sudu',    name:'打字测速',   url:'https://sudu.kehuang.eu.org',        desc:'打字速度测试与练习，挑战你的极限',        cat:'text',  icon:'gauge',       color:'rose' },
+  { id:'flac',    name:'音频转换',   url:'https://flac.kehuang.eu.org',        desc:'FLAC 无损音频的转换与处理',               cat:'media', icon:'music',       color:'cyan' },
+  { id:'shuiyin', name:'图片水印',   url:'https://shuiyin.kehuang.eu.org',     desc:'为图片快速添加水印，保护你的创作',        cat:'media', icon:'droplet',     color:'blue' },
+  { id:'read',    name:'在线阅读',   url:'https://read.kehuang.eu.org',        desc:'稍后读与沉浸式阅读空间',                  cat:'fun',   icon:'bookOpen',    color:'violet' },
+  { id:'game',    name:'游戏大厅',   url:'https://game.kehuang.eu.org',        desc:'休闲小游戏合集，忙里偷闲放松一下',        cat:'fun',   icon:'gamepad',     color:'fuchsia' },
+];
+
+// 分类 Tab
+const TABS = [
+  { key:'all',    label:'全部站点', desc:'精心整理的常用工具集合' },
+  { key:'work',   label:'效率工具', desc:'笔记、待办与配置，让工作流更顺畅' },
+  { key:'text',   label:'文本处理', desc:'文本转换、批量重命名与打字练习' },
+  { key:'media',  label:'媒体处理', desc:'音频转换与图片水印处理' },
+  { key:'fun',    label:'阅读娱乐', desc:'阅读与放松的好去处' },
+  { key:'fav',    label:'我的收藏', desc:'你标记的高频常用站点' },
+  { key:'custom', label:'自定义',   desc:'由你亲手添加的专属网址' },
+];
+
+// 搜索引擎（必应为默认）
+const ENGINES = {
+  bing:   { name:'必应', full:'必应搜索',  dot:'bg-cyan-500',   hint:'Bing · 默认引擎', make:q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}` },
+  google: { name:'Google', full:'谷歌搜索', dot:'bg-blue-500',  hint:'global search',    make:q=>`https://www.google.com/search?q=${encodeURIComponent(q)}` },
+  baidu:  { name:'百度', full:'百度搜索',  dot:'bg-blue-600',   hint:'中文搜索',         make:q=>`https://www.baidu.com/s?wd=${encodeURIComponent(q)}` },
+  ddg:    { name:'DuckDuckGo', full:'DuckDuckGo', dot:'bg-orange-500', hint:'注重隐私',   make:q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}` },
+  site:   { name:'本站内', full:'站内搜索', dot:'bg-teal-600',   hint:'site:kehuang.eu.org', make:q=>`https://www.bing.com/search?q=${encodeURIComponent('site:kehuang.eu.org '+q)}` },
+};
+
+const QUICK_IDS = ['tool','todo','note','sudu','game'];                 // 快速访问 chips
+const COLORS = ['teal','sky','indigo','amber','rose','violet','cyan','orange']; // 自定义站点配色轮换
+
+/* ================================================================
+ * 工具函数与状态
+ * ================================================================ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const store = {
+  get(k, def){ try{ const v = localStorage.getItem(k); return v == null ? def : JSON.parse(v); }catch(e){ return def; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+
+// 初始化状态（含本地数据安全校验）
+const state = {
+  tab: 'all',
+  engine: ENGINES[store.get('kh_engine','bing')] ? store.get('kh_engine','bing') : 'bing',
+  favs: new Set((store.get('kh_favs',[])||[]).filter(x => typeof x === 'string')),
+  customs: (store.get('kh_customs',[])||[]).filter(s => s && s.name && s.url).map(s => ({
+    ...s, custom:true, cat:s.cat||'custom', icon:'globe',
+    color:s.color || 'teal',
+    desc:s.desc || '自定义收藏站点',
+    domain:s.domain || (()=>{ try{ return new URL(s.url).hostname }catch(e){ return s.url } })(),
+  })),
+  history: (store.get('kh_history',[])||[]).filter(x => typeof x === 'string').slice(0,10),
+  list: [],
+};
+
+// DOM 引用
+const tabList=$('tabList'), tabInd=$('tabInd'), grid=$('grid'), toastBox=$('toastBox');
+const input=$('searchInput'), searchForm=$('searchForm'), sugBox=$('sugBox');
+const engineBtn=$('engineBtn'), engineMenu=$('engineMenu'), engineDot=$('engineDot'), engineName=$('engineName'), engineChev=$('engineChev');
+const addModal=$('addModal'), helpModal=$('helpModal'), addForm=$('addForm');
+const fName=$('fName'), fUrl=$('fUrl'), fDesc=$('fDesc'), fCat=$('fCat'), fUrlWrap=$('fUrlWrap'), formErr=$('formErr');
+
+/* ================================================================
+ * 渲染：Tab / 卡片 / 快速访问
+ * ================================================================ */
+function renderTabs(){
+  const all = [...SITES, ...state.customs];
+  const counts = {
+    all: all.length,
+    work: all.filter(s=>s.cat==='work').length,
+    text: all.filter(s=>s.cat==='text').length,
+    media: all.filter(s=>s.cat==='media').length,
+    fun: all.filter(s=>s.cat==='fun').length,
+    fav: all.filter(s=>state.favs.has(s.id)).length,
+    custom: state.customs.length,
+  };
+  tabList.innerHTML = TABS.map(t => {
+    const a = t.key === state.tab;
+    return `<button type="button" data-tab="${t.key}" class="relative flex items-center gap-1.5 px-3.5 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${a?'text-teal-700':'text-slate-500 hover:text-teal-700 hover:bg-teal-50/40'}">
+      ${t.label}<span class="text-[11px] font-mono leading-none px-1.5 py-[3px] rounded-full ${a?'bg-teal-100/80 text-teal-700':'bg-slate-100 text-slate-400'}">${counts[t.key]}</span>
+    </button>`;
+  }).join('');
+}
+
+// 滑动式 Tab 指示条
+function moveIndicator(){
+  requestAnimationFrame(()=>{
+    const b = tabList.querySelector(`[data-tab="${state.tab}"]`);
+    if(!b) return;
+    tabInd.style.opacity = '1';
+    tabInd.style.width = b.offsetWidth + 'px';
+    tabInd.style.left = b.offsetLeft + 'px';
+  });
+}
+
+function switchTab(k){
+  state.tab = k;
+  renderTabs(); renderGrid(); moveIndicator();
+}
+
+function cardHTML(s, i){
+  const fav = state.favs.has(s.id);
+  return `
+  <div class="group relative bg-white rounded-2xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(15,23,42,.04)] hover:shadow-[0_16px_32px_-12px_rgba(13,148,136,.28)] hover:-translate-y-1.5 hover:border-${s.color}-300/70 transition-all duration-300 animate-fade-up cursor-pointer" style="animation-delay:${Math.min(i,12)*45}ms">
+    <a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 rounded-2xl z-[1] focus-visible:ring-2 focus-visible:ring-teal-500/50" aria-label="在新标签页打开 ${esc(s.name)}"></a>
+    <div class="relative z-[2] pointer-events-none">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-xl bg-${s.color}-50 text-${s.color}-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-${s.color}-100">
+          ${(ICONS[s.icon]||ICONS.globe)('w-6 h-6')}
+        </div>
+        <div class="flex items-center gap-1 pointer-events-auto -mt-1 -mr-1">
+          <button type="button" data-fav="${s.id}" title="${fav?'取消收藏':'加入收藏'}" aria-label="${fav?'取消收藏':'加入收藏'}" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${fav?'text-amber-500 bg-amber-50 opacity-100':'text-slate-300 opacity-0 group-hover:opacity-100 hover:text-amber-400 hover:bg-amber-50 focus-visible:opacity-100'}">
+            ${fav?ICONS.starFill('w-4 h-4'):ICONS.star('w-4 h-4')}
+          </button>
+          ${s.custom?`<button type="button" data-del="${s.id}" title="删除" aria-label="删除该网址" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 opacity-0 group-hover:opacity-100 hover:text-rose-500 hover:bg-rose-50 focus-visible:opacity-100 transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          </button>`:''}
+        </div>
+      </div>
+      <h3 class="mt-4 font-semibold text-slate-800 text-[15px] truncate group-hover:text-teal-700 transition-colors duration-300">${esc(s.name)}</h3>
+      <p class="mt-1 text-[13px] leading-relaxed text-slate-500 line-clamp-2 min-h-[2.5rem]">${esc(s.desc)}</p>
+    </div>
+    <div class="relative z-[2] mt-3.5 pt-3 border-t border-slate-100/90 flex items-center justify-between pointer-events-none">
+      <span class="font-mono text-[11px] text-slate-400 truncate">${esc(s.domain)}</span>
+      <span class="text-slate-300 group-hover:text-teal-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">${ICONS.arrowUpRight('w-4 h-4')}</span>
+    </div>
+  </div>`;
+}
+
+function emptyHTML(){
+  const isFav = state.tab === 'fav';
+  return `<div class="col-span-full">
+    <div class="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+      <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-400 flex items-center justify-center border border-teal-100/60">${ICONS[isFav?'star':'link']('w-7 h-7')}</div>
+      <p class="mt-5 font-semibold text-slate-700">${isFav?'还没有收藏任何站点':'还没有自定义网址'}</p>
+      <p class="mt-1.5 text-sm text-slate-400 max-w-xs leading-relaxed">${isFav?'鼠标悬停到卡片上，点击右上角的星标即可收藏常用站点。':'点击右上角的「添加网址」按钮，把常用站点加入你的导航。'}</p>
+      ${isFav?'':`<button type="button" id="emptyAddBtn" class="mt-5 h-10 px-5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-0.5 active:translate-y-0 transition-all inline-flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>添加网址</button>`}
+    </div>
+  </div>`;
+}
+
+function renderGrid(){
+  const all = [...SITES, ...state.customs];
+  let list;
+  if(state.tab === 'all')         list = all;
+  else if(state.tab === 'fav')    list = all.filter(s => state.favs.has(s.id));
+  else if(state.tab === 'custom') list = [...state.customs];
+  else                            list = all.filter(s => s.cat === state.tab);
+  state.list = list;
+
+  const meta = TABS.find(t => t.key === state.tab);
+  $('secTitle').textContent = meta.label;
+  $('secDesc').textContent  = meta.desc;
+  $('secCount').textContent = list.length;
+  $('footCount').textContent = all.length;
+
+  grid.innerHTML = list.length ? list.map((s,i)=>cardHTML(s,i)).join('') : emptyHTML();
+}
+
+function renderChips(){
+  const items = QUICK_IDS.map(id => SITES.find(s => s.id === id)).filter(Boolean);
+  $('quickChips').innerHTML = `
+    <span class="text-xs text-slate-400/90 mr-0.5 py-1.5 inline-flex items-center gap-1">${ICONS.link('w-3.5 h-3.5')}快速访问</span>
+    ${items.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-slate-200/90 text-xs font-medium text-slate-600 shadow-sm hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50 hover:-translate-y-0.5 transition-all duration-200">
+      <span class="w-1.5 h-1.5 rounded-full bg-${s.color}-500"></span>${esc(s.name)}</a>`).join('')}`;
+}
+
+/* ================================================================
+ * 时钟与问候
+ * ================================================================ */
+let lastGreet = '';
+function updateClock(){
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  $('clockMain').textContent = p(d.getHours()) + ':' + p(d.getMinutes());
+  $('clockSec').textContent  = ':' + p(d.getSeconds());
+  $('dateText').textContent  = `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · 星期${'日一二三四五六'[d.getDay()]}`;
+  const h = d.getHours();
+  let g, ic, cl;
+  if(h>=5 && h<9){ g='早上好'; ic='sun';  cl='text-amber-400'; }
+  else if(h<12)   { g='上午好'; ic='sun';  cl='text-amber-400'; }
+  else if(h<14)   { g='中午好'; ic='sun';  cl='text-amber-400'; }
+  else if(h<18)   { g='下午好'; ic='sun';  cl='text-amber-400'; }
+  else if(h<23)   { g='晚上好'; ic='moon'; cl='text-indigo-400'; }
+  else            { g='夜深了'; ic='moon'; cl='text-indigo-400'; }
+  if(g !== lastGreet){
+    lastGreet = g;
+    $('greetText').textContent = g;
+    $('greetIcon').innerHTML = ICONS[ic](`w-7 h-7 sm:w-8 sm:h-8 ${cl}`);
+  }
+}
+
+/* ================================================================
+ * Toast 通知（支持撤销等操作按钮）
+ * ================================================================ */
+function toast(msg, action){
+  const el = document.createElement('div');
+  el.className = 'flex items-center gap-2.5 pl-3.5 pr-2 py-2.5 bg-white/95 backdrop-blur border border-slate-200 shadow-xl shadow-slate-900/5 rounded-xl text-sm animate-slide-in transition-all duration-300';
+  el.innerHTML = `<span class="w-6 h-6 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">${ICONS.check('w-3.5 h-3.5')}</span><span class="text-slate-600">${msg}</span>`;
+  const dismiss = () => { el.classList.add('opacity-0','translate-y-2'); setTimeout(()=>el.remove(), 320); };
+  if(action){
+    const btn = document.createElement('button');
+    btn.type='button';
+    btn.className='px-2.5 py-1 rounded-lg text-teal-600 font-medium hover:bg-teal-50 transition-colors text-[13px] shrink-0';
+    btn.textContent = action.label;
+    btn.onclick = () => { action.fn(); dismiss(); };
+    el.appendChild(btn);
+  }
+  toastBox.appendChild(el);
+  setTimeout(dismiss, action ? 5000 : 2600);
+}
+
+/* ================================================================
+ * 搜索：引擎切换 / 必应联想(JSONP) / 历史 / URL 直达
+ * ================================================================ */
+function looksLikeUrl(q){
+  if(!q || /\s/.test(q)) return false;
+  return /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}([/?#/:].*)?$/i.test(q);
+}
+
+let sugTimer = null, sugSeq = 0, lastQuery = '', sugList = [], sugActive = -1;
+
+function showSugBox(){ sugBox.classList.remove('hidden'); }
+function hideSugBox(){ sugBox.classList.add('hidden'); sugActive = -1; }
+
+function highlight(text, q){
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if(idx < 0) return esc(text);
+  return esc(text.slice(0,idx)) + '<span class="text-teal-700 font-medium">' + esc(text.slice(idx, idx+q.length)) + '</span>' + esc(text.slice(idx+q.length));
+}
+
+function sugItemHTML(it, i, q){
+  const active = i === sugActive;
+  let label;
+  if(it.type === 'url')  label = `<span class="font-medium text-teal-700">${esc(it.label)}</span>`;
+  else if(it.type==='hist') label = `<span class="text-slate-700">${esc(it.label)}</span>`;
+  else label = highlight(it.label, q);
+  const icon = it.type==='hist' ? ICONS.clock('w-4 h-4') : it.type==='url' ? ICONS.arrowUpRight('w-4 h-4') : ICONS.search('w-4 h-4');
+  return `<div data-sug="${i}" class="mx-1.5 flex items-center gap-3 px-2.5 h-10 rounded-lg cursor-pointer text-sm transition-colors ${active?'bg-teal-50':'hover:bg-teal-50/60'}">
+    <span class="text-slate-400 shrink-0 flex">${icon}</span>
+    <span class="flex-1 truncate">${label}</span>
+    ${it.type==='url'?'<span class="text-[11px] font-medium text-teal-500 shrink-0">Enter 直达</span>':''}
+    ${it.type==='hist'?`<button type="button" data-delhist="${i}" title="删除该条记录" class="w-6 h-6 rounded-md flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-colors shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-3.5 h-3.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>`:''}
+  </div>`;
+}
+
+function renderSugBox(q){
+  if(!sugList.length){ hideSugBox(); return; }
+  const isHist = sugList[0].type === 'hist';
+  sugBox.innerHTML = `
+    <div class="px-5 pt-3 pb-1.5 text-[11px] font-medium text-slate-400 tracking-wide">${isHist?'搜索历史':'搜索建议'}</div>
+    ${sugList.map((it,i)=>sugItemHTML(it,i,q)).join('')}
+    ${isHist && state.history.length ? `<div class="border-t border-slate-100 mt-1 pt-1 px-3 pb-1.5"><button type="button" data-clearhist class="text-xs text-slate-400 hover:text-rose-500 px-2 py-1.5 rounded-lg hover:bg-rose-50 transition-colors">清空历史</button></div>`:''}`;
+  showSugBox();
+}
+
+function buildSug(q, bingList){
+  sugList = []; sugActive = -1;
+  if(looksLikeUrl(q)) sugList.push({ type:'url', label:q, action:()=>openUrl(q) });
+  (bingList||[]).forEach(t => sugList.push({ type:'sug', label:t, action:()=>doSearch(t) }));
+  renderSugBox(q);
+}
+
+function buildHistory(){
+  sugList = state.history.slice(0,8).map(t => ({ type:'hist', label:t, action:()=>{ input.value = t; doSearch(t); } }));
+  renderSugBox('');
+}
+
+// 必应搜索联想（JSONP 方式请求，失败静默降级，不影响主功能）
+function requestSug(q){
+  const seq = ++sugSeq, cb = '__khSug' + seq;
+  const script = document.createElement('script');
+  let done = false;
+  const timer = setTimeout(()=>{ if(done) return; done = true; cleanup(); if(seq === sugSeq) hideSugBox(); }, 3500);
+  function cleanup(){ clearTimeout(timer); try{ delete window[cb]; }catch(e){} script.remove(); }
+  window[cb] = data => {
+    if(done || seq !== sugSeq) return;
+    done = true; cleanup();
+    let list = [];
+    try{ list = (data.AS.Results[0].Suggests || []).map(s => s.Txt).filter(Boolean); }catch(e){}
+    list = list.filter(t => t.toLowerCase() !== q.toLowerCase()).slice(0,8);
+    buildSug(q, list);
+  };
+  script.onerror = () => { if(done) return; done = true; cleanup(); if(seq === sugSeq) hideSugBox(); };
+  // 加载态
+  sugList = []; sugActive = -1;
+  sugBox.innerHTML = `<div class="flex items-center gap-3 px-5 h-11 text-sm text-slate-400"><span class="w-4 h-4 border-2 border-teal-200 border-t-teal-500 rounded-full animate-spin"></span>正在获取搜索建议…</div>`;
+  showSugBox();
+  script.src = 'https://api.bing.com/qsonhs.aspx?type=cb&q=' + encodeURIComponent(q) + '&cb=' + cb;
+  document.head.appendChild(script);
+}
+
+function pushHistory(t){
+  state.history = state.history.filter(x => x !== t);
+  state.history.unshift(t);
+  state.history = state.history.slice(0,10);
+  store.set('kh_history', state.history);
+}
+
+function openUrl(u){
+  u = u.trim();
+  if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  pushHistory(u);
+  window.open(u, '_blank');
+  input.value = ''; hideSugBox(); input.blur();
+}
+
+function doSearch(term){
+  term = (term || '').trim();
+  if(!term) return;
+  pushHistory(term);
+  window.open(ENGINES[state.engine].make(term), '_blank');
+  input.value = ''; hideSugBox(); input.blur();
+}
+
+// ---- 搜索框事件 ----
+input.addEventListener('input', () => {
+  const q = input.value;
+  if(!q.trim()){ document.activeElement === input && state.history.length ? buildHistory() : hideSugBox(); return; }
+  lastQuery = q;
+  clearTimeout(sugTimer);
+  if(looksLikeUrl(q)){ buildSug(q, []); return; }   // URL 直达，无需联想
+  sugTimer = setTimeout(() => requestSug(q), 260);  // 防抖请求联想
+});
+input.addEventListener('focus', () => { if(!input.value.trim() && state.history.length) buildHistory(); });
+input.addEventListener('keydown', e => {
+  const open = !sugBox.classList.contains('hidden') && sugList.length;
+  if(open){
+    if(e.key === 'ArrowDown'){ e.preventDefault(); sugActive = (sugActive+1) % sugList.length; renderSugBox(lastQuery); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); sugActive = (sugActive-1+sugList.length) % sugList.length; renderSugBox(lastQuery); }
+    else if(e.key === 'Enter' && sugActive >= 0){ e.preventDefault(); sugList[sugActive].action(); }
+    else if(e.key === 'Escape'){ hideSugBox(); }
+  } else if(e.key === 'Escape'){ input.blur(); }
+});
+searchForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if(!q) return;
+  looksLikeUrl(q) ? openUrl(q) : doSearch(q);
+});
+// 下拉区域按住鼠标时不让输入框失焦，保证点击顺畅
+sugBox.addEventListener('mousedown', e => e.preventDefault());
+sugBox.addEventListener('click', e => {
+  const dh = e.target.closest('[data-delhist]');
+  if(dh){ state.history.splice(+dh.dataset.delhist, 1); store.set('kh_history', state.history); buildHistory(); return; }
+  if(e.target.closest('[data-clearhist]')){ state.history = []; store.set('kh_history', []); hideSugBox(); toast('已清空搜索历史'); return; }
+  const it = e.target.closest('[data-sug]');
+  if(it && sugList[+it.dataset.sug]) sugList[+it.dataset.sug].action();
+});
+
+// ---- 引擎切换 ----
+function setMenuOpen(open){
+  engineMenu.classList.toggle('opacity-0', !open);
+  engineMenu.classList.toggle('scale-95', !open);
+  engineMenu.classList.toggle('pointer-events-none', !open);
+  engineChev.classList.toggle('rotate-180', open);
+}
+function renderEngineMenu(){
+  engineMenu.innerHTML = Object.entries(ENGINES).map(([k,e]) => `
+    <button type="button" data-engine="${k}" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${k===state.engine?'bg-teal-50/80':'hover:bg-slate-50'}">
+      <span class="w-2 h-2 rounded-full ${e.dot} shrink-0"></span>
+      <span class="flex-1 min-w-0">
+        <span class="block text-sm font-medium ${k===state.engine?'text-teal-700':'text-slate-700'}">${e.full}</span>
+        <span class="block text-[11px] font-mono text-slate-400 truncate">${e.hint}</span>
+      </span>
+      ${k===state.engine?`<span class="text-teal-600 shrink-0">${ICONS.check('w-4 h-4')}</span>`:''}
+    </button>`).join('');
+}
+function setEngine(k){
+  if(!ENGINES[k]) return;
+  state.engine = k;
+  store.set('kh_engine', k);
+  const e = ENGINES[k];
+  engineDot.className = `w-2 h-2 rounded-full ${e.dot}`;
+  engineName.textContent = e.name;
+  input.placeholder = `在${e.full}中搜索，或输入网址直达…`;
+  renderEngineMenu();
+}
+engineBtn.addEventListener('click', e => { e.stopPropagation(); setMenuOpen(engineMenu.classList.contains('opacity-0')); });
+engineMenu.addEventListener('mousedown', e => e.preventDefault());
+engineMenu.addEventListener('click', e => {
+  const b = e.target.closest('[data-engine]');
+  if(!b) return;
+  setEngine(b.dataset.engine);
+  setMenuOpen(false);
+});
+document.addEventListener('click', e => {
+  if(!e.target.closest('#searchForm')){ hideSugBox(); setMenuOpen(false); }
+});
+
+/* ================================================================
+ * 收藏 / 删除自定义 / 卡片事件委托
+ * ================================================================ */
+function toggleFav(id){
+  const had = state.favs.has(id);
+  had ? state.favs.delete(id) : state.favs.add(id);
+  store.set('kh_favs', [...state.favs]);
+  const site = [...SITES, ...state.customs].find(s => s.id === id);
+  if(site) toast(had ? `已取消收藏「${esc(site.name)}」` : `已收藏「${esc(site.name)}」`, had ? null : { label:'查看', fn:()=>switchTab('fav') });
+  renderTabs(); moveIndicator();
+  if(state.tab === 'fav'){ renderGrid(); return; }
+  // 就地更新星标按钮，避免重放卡片动画
+  const btn = grid.querySelector(`[data-fav="${id}"]`);
+  if(btn){
+    const fav = !had;
+    btn.title = fav ? '取消收藏' : '加入收藏';
+    btn.className = `w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${fav?'text-amber-500 bg-amber-50 opacity-100':'text-slate-300 opacity-0 group-hover:opacity-100 hover:text-amber-400 hover:bg-amber-50 focus-visible:opacity-100'}`;
+    btn.innerHTML = fav ? ICONS.starFill('w-4 h-4') : ICONS.star('w-4 h-4');
+  }
+}
+
+function delCustom(id){
+  const idx = state.customs.findIndex(s => s.id === id);
+  if(idx < 0) return;
+  const [item] = state.customs.splice(idx, 1);
+  store.set('kh_customs', state.customs);
+  renderTabs(); moveIndicator(); renderGrid();
+  toast(`已删除「${esc(item.name)}」`, { label:'撤销', fn:()=>{
+    state.customs.splice(Math.min(idx, state.customs.length), 0, item);
+    store.set('kh_customs', state.customs);
+    renderTabs(); moveIndicator(); renderGrid();
+  }});
+}
+
+grid.addEventListener('click', e => {
+  const favB = e.target.closest('[data-fav]');
+  if(favB){ e.preventDefault(); e.stopPropagation(); toggleFav(favB.dataset.fav); return; }
+  const delB = e.target.closest('[data-del]');
+  if(delB){ e.preventDefault(); e.stopPropagation(); delCustom(delB.dataset.del); return; }
+  if(e.target.closest('#emptyAddBtn')) openAdd();
+});
+
+/* ================================================================
+ * 模态框
+ * ================================================================ */
+function anyModalOpen(){ return !addModal.classList.contains('hidden') || !helpModal.classList.contains('hidden'); }
+function openModal(m){ m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeModal(m){ m.classList.add('hidden'); if(!anyModalOpen()) document.body.style.overflow = ''; }
+
+[addModal, helpModal].forEach(m => m.addEventListener('click', e => { if(e.target.closest('[data-close]')) closeModal(m); }));
+
+function openAdd(){ openModal(addModal); setTimeout(()=>fName.focus(), 60); }
+$('addBtn').addEventListener('click', openAdd);
+$('helpBtn').addEventListener('click', () => openModal(helpModal));
+
+function markErr(el){
+  el.classList.add('!border-rose-400','!ring-4','!ring-rose-500/10','animate-shake');
+  setTimeout(()=>el.classList.remove('animate-shake'), 450);
+  const handler = () => el.classList.remove('!border-rose-400','!ring-4','!ring-rose-500/10');
+  el.addEventListener('input', handler, { once:true });
+}
+function showFormErr(msg){ formErr.textContent = msg; formErr.classList.remove('hidden'); }
+
+addForm.addEventListener('submit', e => {
+  e.preventDefault();
+  formErr.classList.add('hidden');
+  const name = fName.value.trim();
+  const url  = fUrl.value.trim().replace(/^https?:\/\//i,'').replace(/\/+$/,'');
+  let ok = true;
+  if(!name){ markErr(fName); ok = false; }
+  const host = url.split(/[/?#]/)[0];
+  if(!url || !/^[\w-]+(\.[\w-]+)+(:\d+)?$/i.test(host)){ markErr(fUrlWrap); ok = false; }
+  if(!ok){ showFormErr('请检查表单：名称必填，网址需为有效域名（如 example.com）'); return; }
+
+  const site = {
+    id: 'c_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    name, url: 'https://' + url, domain: host,
+    desc: fDesc.value.trim() || '自定义收藏站点',
+    cat: fCat.value, icon: 'globe',
+    color: COLORS[state.customs.length % COLORS.length], custom: true,
+  };
+  state.customs.push(site);
+  store.set('kh_customs', state.customs);
+  closeModal(addModal); addForm.reset();
+  switchTab(site.cat === 'custom' ? 'custom' : site.cat);
+  toast(`已添加「${esc(site.name)}」`, { label:'打开', fn:()=>window.open(site.url,'_blank') });
+});
+
+/* ================================================================
+ * 全局快捷键
+ * ================================================================ */
+document.addEventListener('keydown', e => {
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+  if((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)){ e.preventDefault(); input.focus(); input.select(); return; }
+  if(e.key === 'Escape'){
+    if(anyModalOpen()){ closeModal(addModal); closeModal(helpModal); return; }
+    if(typing){ hideSugBox(); input.blur(); }
+    return;
+  }
+  if(typing || e.ctrlKey || e.metaKey || e.altKey || anyModalOpen()) return;
+  if(e.key === '/'){ e.preventDefault(); input.focus(); }
+  else if(/^[1-9]$/.test(e.key)){
+    const s = state.list[+e.key - 1];
+    if(s) window.open(s.url, '_blank');
+  }
+});
+
+/* ================================================================
+ * Tab 点击委托 / 初始化
+ * ================================================================ */
+tabList.addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]');
+  if(!b || b.dataset.tab === state.tab) return;
+  switchTab(b.dataset.tab);
+});
+
+window.addEventListener('resize', moveIndicator);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
+
+// 启动
+setEngine(state.engine);
+renderTabs();
+renderChips();
+renderGrid();
+moveIndicator();
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
