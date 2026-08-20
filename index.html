@@ -74,7 +74,7 @@ tailwind.config = {
     </a>
     <div class="flex items-center gap-2">
       <button type="button" id="helpBtn" title="快捷键帮助" class="w-9 h-9 rounded-lg border border-slate-200 bg-white/60 text-slate-500 hover:text-teal-600 hover:border-teal-300 hover:bg-teal-50 transition-all inline-flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5 w-[18px] h-[18px]"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
       </button>
       <button type="button" id="addBtn" class="h-9 px-3.5 rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/30 hover:-translate-y-px active:translate-y-0 transition-all inline-flex items-center gap-1.5">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
@@ -286,6 +286,7 @@ const ICONS = {
   type:       SVG('<path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/>'),
   fileEdit:   SVG('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M11.5 13.5 15 10l1.5 1.5-3.5 3.5-2 .5z"/>'),
   gauge:      SVG('<path d="m12 14 3.5-3.5"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>'),
+  grid3x3:    SVG('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>'),
   music:      SVG('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
   droplet:    SVG('<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'),
   bookOpen:   SVG('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'),
@@ -311,20 +312,23 @@ const SITES = [
   { id:'config',  name:'配置中心',   url:'https://config.kehuang.eu.org',      desc:'个人配置与参数的统一管理面板',            cat:'work',  icon:'sliders',     color:'slate' },
   { id:'text',    name:'文本处理',   url:'https://text.kehuang.eu.org',        desc:'文本清洗、转换、统计与格式化',            cat:'text',  icon:'type',        color:'amber' },
   { id:'rename',  name:'批量重命名', url:'https://renamefile.kehuang.eu.org',  desc:'文件批量重命名，规则灵活省时省力',        cat:'text',  icon:'fileEdit',    color:'orange' },
-  { id:'sudu',    name:'打字测速',   url:'https://sudu.kehuang.eu.org',        desc:'打字速度测试与练习，挑战你的极限',        cat:'text',  icon:'gauge',       color:'rose' },
   { id:'flac',    name:'音频转换',   url:'https://flac.kehuang.eu.org',        desc:'FLAC 无损音频的转换与处理',               cat:'media', icon:'music',       color:'cyan' },
   { id:'shuiyin', name:'图片水印',   url:'https://shuiyin.kehuang.eu.org',     desc:'为图片快速添加水印，保护你的创作',        cat:'media', icon:'droplet',     color:'blue' },
   { id:'read',    name:'在线阅读',   url:'https://read.kehuang.eu.org',        desc:'稍后读与沉浸式阅读空间',                  cat:'fun',   icon:'bookOpen',    color:'violet' },
+  { id:'sudu',    name:'数独游戏',   url:'https://sudu.kehuang.eu.org',        desc:'经典数独益智游戏，锻炼逻辑思维',          cat:'fun',   icon:'grid3x3',     color:'rose' },
   { id:'game',    name:'游戏大厅',   url:'https://game.kehuang.eu.org',        desc:'休闲小游戏合集，忙里偷闲放松一下',        cat:'fun',   icon:'gamepad',     color:'fuchsia' },
 ];
+
+// 从站点数据提取显示用域名（内置站点与自定义站点通用）
+const domainOf = s => s.domain || (()=>{ try{ return new URL(s.url).hostname }catch(e){ return s.url } })();
 
 // 分类 Tab
 const TABS = [
   { key:'all',    label:'全部站点', desc:'精心整理的常用工具集合' },
   { key:'work',   label:'效率工具', desc:'笔记、待办与配置，让工作流更顺畅' },
-  { key:'text',   label:'文本处理', desc:'文本转换、批量重命名与打字练习' },
+  { key:'text',   label:'文本处理', desc:'文本转换与批量重命名' },
   { key:'media',  label:'媒体处理', desc:'音频转换与图片水印处理' },
-  { key:'fun',    label:'阅读娱乐', desc:'阅读与放松的好去处' },
+  { key:'fun',    label:'阅读娱乐', desc:'阅读、数独与小游戏，放松的好去处' },
   { key:'fav',    label:'我的收藏', desc:'你标记的高频常用站点' },
   { key:'custom', label:'自定义',   desc:'由你亲手添加的专属网址' },
 ];
@@ -435,7 +439,7 @@ function cardHTML(s, i){
       <p class="mt-1 text-[13px] leading-relaxed text-slate-500 line-clamp-2 min-h-[2.5rem]">${esc(s.desc)}</p>
     </div>
     <div class="relative z-[2] mt-3.5 pt-3 border-t border-slate-100/90 flex items-center justify-between pointer-events-none">
-      <span class="font-mono text-[11px] text-slate-400 truncate">${esc(s.domain)}</span>
+      <span class="font-mono text-[11px] text-slate-400 truncate">${esc(domainOf(s))}</span>
       <span class="text-slate-300 group-hover:text-teal-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">${ICONS.arrowUpRight('w-4 h-4')}</span>
     </div>
   </div>`;
@@ -476,7 +480,7 @@ function renderChips(){
   const items = QUICK_IDS.map(id => SITES.find(s => s.id === id)).filter(Boolean);
   $('quickChips').innerHTML = `
     <span class="text-xs text-slate-400/90 mr-0.5 py-1.5 inline-flex items-center gap-1">${ICONS.link('w-3.5 h-3.5')}快速访问</span>
-    ${items.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-slate-200/90 text-xs font-medium text-slate-600 shadow-sm hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50 hover:-translate-y-0.5 transition-all duration-200">
+    ${items.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="${esc(domainOf(s))}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-slate-200/90 text-xs font-medium text-slate-600 shadow-sm hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50 hover:-translate-y-0.5 transition-all duration-200">
       <span class="w-1.5 h-1.5 rounded-full bg-${s.color}-500"></span>${esc(s.name)}</a>`).join('')}`;
 }
 
